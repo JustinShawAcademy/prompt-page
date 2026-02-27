@@ -1,8 +1,16 @@
-'use client'; // since we're using usePathname, a hook 
+'use client';
 import { cn } from "@/lib/utils";
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 
 const navItems = [
   { label: 'Library', href: '/'},
@@ -10,6 +18,7 @@ const navItems = [
 ]
 const Navbar = () => {
   const pathName = usePathname();
+  const { user } = useUser();
   return (
     <header className="w-full fixed z-50 bg-('--bg-primary') text-('--text-primary')">
         <div className="flex justify-between items-center wrapper navbar-height py-4">
@@ -34,6 +43,26 @@ const Navbar = () => {
                     </Link>
                   )
                 })}
+
+                <div className="flex gap-8 items-center">
+                  <SignedOut>
+                    <SignInButton mode="modal" />
+                    {/* <SignUpButton /> */}
+                  </SignedOut>
+                  <SignedIn>
+                    <div className="nav-user-link">
+                      <UserButton />
+                      {user?.firstName && (
+                        <Link 
+                          href="subscriptions"
+                          className="class-user-name"
+                        >
+                          {user.firstName}
+                        </Link>
+                      )}
+                    </div>
+                  </SignedIn>
+                </div>
             </nav>
         </div>
     </header>
