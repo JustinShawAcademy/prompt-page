@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Home Page UI
+### Hero Section
+Creating the [HeroSection.tsx](/components/ui/HeroSection.tsx) is straight forward. We get the images for this section from `public/assests`. 
 
-## Getting Started
+After that, we import that component and place in to our main [page](/app/page.tsx)
+```tsx
+const page = () => {
+  return (
+    <main className='wrapper container'>
+      <HeroSection />
+    </main>
+  )
+}
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+export default page
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Book Cards Section
+We want this component so the user can select the book that they save and want to chat to.'
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+We get our book data from `lib/constants.ts` and we can pass that data from `page.tsx` to later on a component called `BookCard.tsx`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`app/page.tsx`:
+```tsx
+import { Button } from '@/components/ui/button'
+import HeroSection from '@/components/ui/HeroSection'
+import React from 'react'
+import { sampleBooks } from '@/lib/constants'
+import BookCard from '@/components/ui/BookCard'
 
-## Learn More
+const page = () => {
+  return (
+    <main className='wrapper container'>
+      <HeroSection />
+      <div className='library-books-grid'>
+        {sampleBooks.map((book) => (
+          <BookCard
+            key={book._id} // _id because later we use mongoDB
+            title={book.title}
+            author={book.author}
+            coverURL={book.coverURL}
+            slug={book.slug}  
+          />
+        ))}
+      </div>
+    </main>
+  )
+}
 
-To learn more about Next.js, take a look at the following resources:
+export default page
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`BookCard.tsx`:
+```tsx 
+import Image from 'next/image';
+import Link from 'next/link'
+import React from 'react'
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+interface BookCardProps {
+    title: string;
+    author: string;
+    coverURL: string;
+    slug: string
+}
 
-## Deploy on Vercel
+const BookCard = ( {title, author, coverURL, slug}: BookCardProps) => {
+  return (
+    <Link href={`books/${slug}`}> 
+        <article className='book-card'>
+            <figure className='book-card-figure'>
+                <div className='book-card-cover-wrapper'>
+                    <Image
+                        src={coverURL}
+                        alt={title}
+                        width={133}
+                        height={200}
+                        className='book-card-cover'
+                    />
+                </div>
+            </figure>
+            <figcaption className='book-card-meta'>
+                <h3 className='book-card-title'>{title}</h3>
+                <p className='book-card-author'>{author}</p> 
+            </figcaption>
+        </article> 
+    </Link>
+  )
+}
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+export default BookCard
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This code is completed but it won't work yet because Next.js has a built-in security feature for its `<Image />` component. By default, Next.js only allows images to be loaded from the same domain where our application is hosted.
+
+To protect our application from malicious external images, we must explicitly "allowlist" any external hostnames you want to use in your `next.config.js` or   `next.config.mjs` file.
+
+```ts
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'covers.openlibrary.org',
+        pathname: '/**',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+After we save this change to our config file, we must stop and restart our development server.
+
+Now we have to decide between creating the book conversation feature, add new book feature, or database so we can upload books? It makes more sense to do the add new book feature because then we know what fields to structure within our database.
