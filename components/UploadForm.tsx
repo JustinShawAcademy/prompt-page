@@ -9,6 +9,7 @@ import {
   Form,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import {
@@ -70,6 +71,9 @@ const UploadForm = () => {
     try {
       console.log('Form submitted:', values)
       // TODO: wire up actual book creation API
+    } catch (error) {
+      console.error('Submission failed:', error)
+      // TODO: Show error toast/message to user
     } finally {
       setIsSubmitting(false)
     }
@@ -89,7 +93,7 @@ const UploadForm = () => {
               name="pdf"
               render={({ field }) => (
                 <FormItem>
-                  <label className="form-label">Upload Book PDF</label>
+                  <FormLabel className="form-label">Upload Book PDF</FormLabel>
                   <div
                     className={cn(
                       'upload-dropzone border-2 border-dashed border-[var(--border-medium)]',
@@ -142,7 +146,7 @@ const UploadForm = () => {
               name="coverImage"
               render={({ field }) => (
                 <FormItem>
-                  <label className="form-label">Cover Image</label>
+                  <FormLabel className="form-label">Cover Image</FormLabel>
                   <div
                     className={cn(
                       'upload-dropzone border-2 border-dashed border-[var(--border-medium)]',
@@ -195,7 +199,7 @@ const UploadForm = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <label className="form-label">Title</label>
+                  <FormLabel  className="form-label">Title</FormLabel >
                   <input
                     className="form-input"
                     placeholder="ex: Rich Dad Poor Dad"
@@ -212,7 +216,7 @@ const UploadForm = () => {
               name="author"
               render={({ field }) => (
                 <FormItem>
-                  <label className="form-label">Author Name</label>
+                  <FormLabel  className="form-label">Author Name</FormLabel >
                   <input
                     className="form-input"
                     placeholder="ex: Robert Kiyosaki"
@@ -229,7 +233,7 @@ const UploadForm = () => {
               name="voice"
               render={({ field }) => (
                 <FormItem>
-                  <label className="form-label">Choose Assistant Voice</label>
+                  <FormLabel className="form-label">Choose Assistant Voice</FormLabel >
                   <div className="space-y-4">
                     <div>
                       <p className="text-sm font-medium text-[var(--text-secondary)] mb-2">

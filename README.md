@@ -249,7 +249,7 @@ File inputs can't be controlled by react-hook-form directly (browsers don't let 
   name="pdf"
   render={({ field }) => (
     <FormItem>
-      <label className="form-label">Upload Book PDF</label>
+      <FormLabel className="form-label">Upload Book PDF</FormLabel>
       <div
         className={cn(
           'upload-dropzone border-2 border-dashed border-[var(--border-medium)]',
