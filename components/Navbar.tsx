@@ -20,7 +20,7 @@ const Navbar = () => {
   const pathName = usePathname();
   const { user } = useUser();
   return (
-    <header className="w-full fixed z-50 bg-('--bg-primary') text-('--text-primary')">
+    <header className="w-full fixed z-50 bg-(--bg-primary) text-(--text-primary)">
         <div className="flex justify-between items-center wrapper navbar-height py-4">
             <Link href="/" className="flex gap-1 items-center">
                 <Image src='/assets/logo.png' alt='prompt page' width={42} height={26} />
