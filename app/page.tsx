@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button'
-import HeroSection from '@/components/ui/HeroSection'
+import HeroSection from '@/components/HeroSection'
 import React from 'react'
 import { sampleBooks } from '@/lib/constants'
-import BookCard from '@/components/ui/BookCard'
+import BookCard from '@/components/BookCard'
 
 const page = () => {
   return (
